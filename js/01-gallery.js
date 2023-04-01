@@ -1,9 +1,7 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
-// console.log(galleryItems);
 
 const galleryList = document.querySelector(".gallery");
-// console.log(galleryList);
 
 const markup = galleryItems
   .map(
@@ -20,12 +18,26 @@ const markup = galleryItems
   )
   .join("");
 
-// console.log(markup);
 galleryList.insertAdjacentHTML("afterbegin", markup);
 
 galleryList.addEventListener("click", onClick);
 
 function onClick(evt) {
   evt.preventDefault();
-  console.log(evt.target);
+  if (evt.target.nodeName !== "IMG") {
+    return;
+  } else {
+    const instance = basicLightbox.create(
+      `<img src="${evt.target.dataset.source}" />`
+    );
+    instance.show();
+
+    galleryList.addEventListener("keydown", onkeyDownClose);
+
+    function onkeyDownClose(evt) {
+      if (evt.code === "Escape") {
+        instance.close();
+      }
+    }
+  }
 }
